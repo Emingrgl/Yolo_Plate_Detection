@@ -1,0 +1,11 @@
+# YOLO Dataset Configuration for Plate Detection
+# Colab veya yerel ortamda veri setinizin dizinini belirtin
+
+path: ./dataset  # Veri seti kök dizini (veya Colab için /content/dataset)
+train: images/train
+val: images/val
+test: images/test
+
+# Sınıflar
+names:
+  0: plate
