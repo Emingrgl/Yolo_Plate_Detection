@@ -32,9 +32,6 @@ except ImportError:
     YOLO = None
 
 
-# ==============================================================================
-# ARKA PLAN İŞÇİ (THREAD) SINIFI - ARAYÜZÜN DONMASINI ENGELLER VE SIRALI ÇALIŞTIRIR
-# ==============================================================================
 class PipelineWorker(QThread):
     log_signal = Signal(str)
     status_signal = Signal(str)
@@ -43,7 +40,7 @@ class PipelineWorker(QThread):
 
     def __init__(self, steps, config):
         super().__init__()
-        self.steps = steps  # Örn: [1, 2, 3, 4, 5] veya sadece [2]
+        self.steps = steps
         self.cfg = config
         self.mutex = QMutex()
         self.condition = QWaitCondition()
@@ -93,9 +90,7 @@ class PipelineWorker(QThread):
             self.status_signal.emit("Hata Oluştu!")
             self.finished_signal.emit(False, str(e))
 
-    # --------------------------------------------------------------------------
-    # 1. SCRIPT: VERİ KAZIMA VE GÖRSEL İNDİRME
-    # --------------------------------------------------------------------------
+    # 1. SCRIPT
     def run_step_1(self):
         if Camoufox is None:
             raise ImportError("Camoufox veya Playwright yüklü değil!")
@@ -266,9 +261,8 @@ class PipelineWorker(QThread):
             if len(self.steps) == 1:
                 self.wait_for_user("Tarayıcıyı kapatmak için 'Devam Et / Onayla' butonuna basın...")
 
-    # --------------------------------------------------------------------------
     # 2. SCRIPT: YOLO İLE LABEL OLUŞTURMA
-    # --------------------------------------------------------------------------
+
     def run_step_2(self):
         if YOLO is None or cv2 is None:
             raise ImportError("ultralytics (YOLO) veya opencv-python (cv2) yüklü değil!")
@@ -351,9 +345,8 @@ class PipelineWorker(QThread):
         self.log(f"Etiketlenmiş görseller: {LABEL_CAR_DIR}")
         self.log(f"TXT etiketleri: {ETIKETLER_DIR}")
 
-    # --------------------------------------------------------------------------
     # 3. SCRIPT: HATALI LABEL KONTROL EDİCİ VE SİLİCİ
-    # --------------------------------------------------------------------------
+
     def run_step_3(self):
         self.log("\n" + "=" * 60)
         self.log(">>> 3. ADIM BAŞLADI: Hatalı Etiket Kontrolü ve Temizliği")
@@ -415,9 +408,8 @@ class PipelineWorker(QThread):
         self.log(f"Boş yapılmış: {silinen_bos}")
         self.log(f"Toplam silinen veri: {silinen_coklu + silinen_bos}")
 
-    # --------------------------------------------------------------------------
     # 4. SCRIPT: EŞZAMANLI AD DEĞİŞTİRİCİ (TEMP İLE GÜVENLİ)
-    # --------------------------------------------------------------------------
+
     def run_step_4(self):
         self.log("\n" + "=" * 60)
         self.log(">>> 4. ADIM BAŞLADI: Eşzamanlı Yeniden Adlandırma")
@@ -452,7 +444,6 @@ class PipelineWorker(QThread):
 
         gecici_dosyalar = []
 
-        # Çakışmaları önlemek için önce temp isimlere çevir
         for klasor in klasor_listesi:
             for dosya in os.listdir(klasor):
                 tam_yol = os.path.join(klasor, dosya)
@@ -468,7 +459,6 @@ class PipelineWorker(QThread):
                         os.rename(tam_yol, gecici_yol)
                         gecici_dosyalar.append((gecici_yol, hedef_yol, dosya, yeni_isim))
 
-        # Geçici isimleri nihai img(x) isimlerine çevir
         for gecici_yol, hedef_yol, eski_ad, yeni_ad in gecici_dosyalar:
             os.rename(gecici_yol, hedef_yol)
 
@@ -476,9 +466,8 @@ class PipelineWorker(QThread):
         for eski, yeni in list(isim_haritasi.items())[:10]:
             self.log(f"  '{eski}' -> '{yeni}'")
 
-    # --------------------------------------------------------------------------
     # 5. SCRIPT: TRAIN / VAL / TEST AYIRMA İŞLEMİ
-    # --------------------------------------------------------------------------
+
     def run_step_5(self):
         self.log("\n" + "=" * 60)
         self.log(">>> 5. ADIM BAŞLADI: Train / Val / Test Veri Seti Ayırma")
@@ -553,10 +542,8 @@ class PipelineWorker(QThread):
         self.log(f"Toplam: {toplam_veri} veri.")
         self.log(f"Train: {len(train_data)}, Val: {len(val_data)}, Test: {len(test_data)}")
 
+#GUI
 
-# ==============================================================================
-# ANA ARAYÜZ PENCERESİ (MODERN PYSIDE6 GUI)
-# ==============================================================================
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -573,7 +560,6 @@ class MainWindow(QMainWindow):
         main_layout.setSpacing(12)
         main_layout.setContentsMargins(16, 16, 16, 16)
 
-        # 1. ÜST PANEL: ORTAK KLASÖR VE DİZİN AYARLARI
         top_group = QGroupBox("Ortak Çalışma Dizini ve Klasör İsimleri (1, 2, 3 ve 4. Adımlar İçin)")
         top_layout = QGridLayout(top_group)
 
@@ -600,7 +586,6 @@ class MainWindow(QMainWindow):
 
         main_layout.addWidget(top_group)
 
-        # 2. ORTA PANEL: SEKMELİ SCRIPT AYARLARI
         self.tabs = QTabWidget()
         self.setup_tab_1()
         self.setup_tab_2()
@@ -609,7 +594,6 @@ class MainWindow(QMainWindow):
         self.setup_tab_5()
         main_layout.addWidget(self.tabs)
 
-        # 3. AKSİYON BAR: TÜMÜNÜ ÇALIŞTIR VE ETKİLEŞİM BUTONU
         action_frame = QFrame()
         action_frame.setObjectName("actionFrame")
         action_layout = QHBoxLayout(action_frame)
@@ -634,7 +618,6 @@ class MainWindow(QMainWindow):
 
         main_layout.addWidget(action_frame)
 
-        # 4. ALT PANEL: CANLI LOG EKRANI
         log_group = QGroupBox("Canlı İşlem Çıktısı (Konsol / Log)")
         log_layout = QVBoxLayout(log_group)
         self.log_output = QTextEdit()
@@ -649,7 +632,6 @@ class MainWindow(QMainWindow):
 
         main_layout.addWidget(log_group, stretch=1)
 
-    # ---------------- SEKME 1: GÖRSEL İNDİRİCİ ----------------
     def setup_tab_1(self):
         tab = QWidget()
         layout = QGridLayout(tab)
@@ -699,7 +681,6 @@ class MainWindow(QMainWindow):
 
         self.tabs.addTab(tab, "1. Görsel İndirici")
 
-    # ---------------- SEKME 2: YOLO ETİKETLEME ----------------
     def setup_tab_2(self):
         tab = QWidget()
         layout = QGridLayout(tab)
@@ -738,7 +719,6 @@ class MainWindow(QMainWindow):
 
         self.tabs.addTab(tab, "2. YOLO Etiketleme")
 
-    # ---------------- SEKME 3: HATALI LABEL KONTROLÜ ----------------
     def setup_tab_3(self):
         tab = QWidget()
         layout = QVBoxLayout(tab)
@@ -759,7 +739,6 @@ class MainWindow(QMainWindow):
 
         self.tabs.addTab(tab, "3. Hatalı Etiket Silici")
 
-    # ---------------- SEKME 4: YENİDEN ADLANDIRICI ----------------
     def setup_tab_4(self):
         tab = QWidget()
         layout = QGridLayout(tab)
@@ -785,7 +764,6 @@ class MainWindow(QMainWindow):
 
         self.tabs.addTab(tab, "4. Ad Değiştirici")
 
-    # ---------------- SEKME 5: TRAIN / VAL / TEST AYIRICI ----------------
     def setup_tab_5(self):
         tab = QWidget()
         layout = QGridLayout(tab)
@@ -814,7 +792,6 @@ class MainWindow(QMainWindow):
         self.s5_test_label.setStyleSheet("color: #38bdf8; font-weight: bold;")
         layout.addWidget(self.s5_test_label, 0, 6)
 
-        # Kaynak Çiftleri (Birden fazla klasörü birleştirip bölebilmek için)
         layout.addWidget(QLabel("1. Kaynak Resim Klasörü:"), 1, 0)
         self.s5_src1_img = QLineEdit(self.raw_folder_edit.text())
         layout.addWidget(self.s5_src1_img, 1, 1, 1, 2)
@@ -840,7 +817,6 @@ class MainWindow(QMainWindow):
 
         self.tabs.addTab(tab, "5. Dataset Ayırıcı (Train/Val/Test)")
 
-    # ---------------- YARDIMCI FONKSİYONLAR ----------------
     def sync_step5_primary_source(self):
         """Üstteki klasör adları değiştikçe 5. sekmedeki 1. kaynak kutularını otomatik günceller."""
         if hasattr(self, 's5_src1_img'):

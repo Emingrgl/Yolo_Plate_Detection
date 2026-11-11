@@ -55,3 +55,8 @@ notlar.txt
 # OS generated
 Thumbs.db
 .DS_Store
+
+# Binaries & Installers
+*.exe
+
+test/

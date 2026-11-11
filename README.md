@@ -8,13 +8,14 @@
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![GUI](https://img.shields.io/badge/GUI-PySide6%20%2F%20Qt-brightgreen.svg)](https://doc.qt.io/qtforpython-6/)
 [![YOLO](https://img.shields.io/badge/YOLO-Ultralytics%20v8%20%2F%20v11-orange.svg)](https://github.com/ultralytics/ultralytics)
-[![Scraper](https://img.shields.io/badge/Scraper-Camoufox%20%26%20Playwright-purple.svg)](https://github.com/daijro/camoufox)
+[![Windows](https://img.shields.io/badge/Platform-Windows%20Only%20(Installer)-0078D6?logo=windows&logoColor=white)](https://github.com/Emingrgl/Yolo_Plate_Detection/releases)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Emingrgl/Yolo_Plate_Detection/blob/main/train_colab.ipynb)
 [![Release](https://img.shields.io/github/v/release/Emingrgl/Yolo_Plate_Detection?color=success)](https://github.com/Emingrgl/Yolo_Plate_Detection/releases)
 
 An all-in-one, production-ready computer vision pipeline and desktop application for **License Plate Detection**. It seamlessly unifies automated web scraping, anti-detect browser automation, AI auto-labeling, strict data quality filtration, collision-safe file indexing, and standard YOLO **Train / Val / Test** dataset splitting inside a responsive **PySide6 (Qt)** dark-themed GUI.
 
-Also includes ready-to-run **Google Colab GPU training** scripts and Jupyter Notebooks.
+> [!IMPORTANT]
+> **Platform Support Notice:** The standalone pre-compiled desktop installer (`AutoPlate_Setup_v1.0.exe`) currently supports **Windows 10 / 11 (64-bit)** only. Linux and macOS users can execute the entire pipeline directly from source using Python.
 
 ---
 
@@ -22,11 +23,13 @@ Also includes ready-to-run **Google Colab GPU training** scripts and Jupyter Not
 - [✨ Key Features](#-key-features)
 - [🔄 5-Stage Data Pipeline Architecture](#-5-stage-data-pipeline-architecture)
 - [💻 Installation](#-installation)
+  - [Option A: Windows Setup Installer (Recommended)](#option-a-windows-setup-installer-recommended)
+  - [Option B: Run from Source (Cross-Platform)](#option-b-run-from-source-cross-platform)
 - [🚀 Running the Application](#-running-the-application)
 - [☁️ Training on Google Colab (GPU)](#️-training-on-google-colab-gpu)
 - [📁 Dataset Directory Structure](#-dataset-directory-structure)
 - [⚙️ Configuration Parameters](#️-configuration-parameters)
-- [📦 Releases](#-releases)
+- [📦 Releases & Downloads](#-releases--downloads)
 - [📄 Contributing & License](#-contributing--license)
 
 ---
@@ -34,6 +37,7 @@ Also includes ready-to-run **Google Colab GPU training** scripts and Jupyter Not
 ## ✨ Key Features
 
 - **Modern Dark-Themed GUI:** Built with PySide6 (Qt), featuring clean inputs, step toggles, and live log streaming.
+- **Standalone Windows Installer:** Pre-packaged executable with desktop shortcuts and embedded dependencies—no Python or CUDA configuration required.
 - **Non-blocking Multithreaded Execution:** Powered by `QThread`, `QMutex`, and `QWaitCondition` so heavy web scraping and model inference never freeze the UI.
 - **Interactive Cloudflare / Bot Bypass:** Built-in interactive browser pause mechanism allows users to pass verification checks manually before automated crawling resumes.
 - **Automated AI Labeling:** Leverages Ultralytics YOLO models to automatically detect license plates, generate normalized bounding box annotations (`.txt`), and export visual confirmation overlays.
@@ -78,17 +82,22 @@ flowchart LR
 
 ## 💻 Installation
 
-### Prerequisites
-- Python 3.9+
-- Git
+### Option A: Windows Setup Installer (Recommended)
+> **Note:** The compiled setup package currently runs on **Windows (64-bit)** only.
 
-### 1. Clone the Repository
+1. Go to [Releases](https://github.com/Emingrgl/Yolo_Plate_Detection/releases).
+2. Download **`AutoPlate_Setup_v1.0.exe`**.
+3. Run the installer wizard, follow the on-screen steps, and launch AutoPlate directly from your Desktop or Start Menu.
+
+### Option B: Run from Source (Cross-Platform)
+
+#### 1. Clone the Repository
 ```bash
 git clone https://github.com/Emingrgl/Yolo_Plate_Detection.git
 cd Yolo_Plate_Detection
 ```
 
-### 2. Create and Activate Virtual Environment
+#### 2. Create and Activate Virtual Environment
 ```bash
 # Windows
 python -m venv .venv
@@ -99,7 +108,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Install Dependencies
+#### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
@@ -211,12 +220,12 @@ Key settings configurable via the GUI **Parametreler** tab:
 
 ---
 
-## 📦 Releases
+## 📦 Releases & Downloads
 
-Find pre-configured packages, changelogs, and release assets under [GitHub Releases](https://github.com/Emingrgl/Yolo_Plate_Detection/releases):
+Pre-packaged installers and changelogs are available under [GitHub Releases](https://github.com/Emingrgl/Yolo_Plate_Detection/releases):
 
 - **[v1.0.0](https://github.com/Emingrgl/Yolo_Plate_Detection/releases/tag/v1.0.0)**:
-  - Initial public release of PySide6 GUI pipeline.
+  - 🪟 **`AutoPlate_Setup_v1.0.exe`**: Official Windows 64-bit standalone installer.
   - Multi-stage scraping, labeling, cleaning, and dataset splitter.
   - Interactive Colab GPU training notebook and comprehensive documentation.
 

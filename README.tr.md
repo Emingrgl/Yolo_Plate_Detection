@@ -8,11 +8,14 @@
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![GUI](https://img.shields.io/badge/GUI-PySide6%20%2F%20Qt-brightgreen.svg)](https://doc.qt.io/qtforpython-6/)
 [![YOLO](https://img.shields.io/badge/YOLO-Ultralytics%20v8%20%2F%20v11-orange.svg)](https://github.com/ultralytics/ultralytics)
-[![Scraper](https://img.shields.io/badge/Scraper-Camoufox%20%26%20Playwright-purple.svg)](https://github.com/daijro/camoufox)
+[![Windows](https://img.shields.io/badge/Platform-Şimdilik%20Sadece%20Windows%20(Setup)-0078D6?logo=windows&logoColor=white)](https://github.com/Emingrgl/Yolo_Plate_Detection/releases)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Emingrgl/Yolo_Plate_Detection/blob/main/train_colab.ipynb)
 [![Release](https://img.shields.io/github/v/release/Emingrgl/Yolo_Plate_Detection?color=success)](https://github.com/Emingrgl/Yolo_Plate_Detection/releases)
 
 Araç plakası tespiti (**License Plate Detection**) için web scraping'den başlayarak otomatik etiketlemeye, veri temizlemeye, dosya indekslemeye ve nihayetinde YOLO formatında **Train / Val / Test** veri seti bölmeye kadar tüm süreci tek bir modern grafik arayüz (GUI) altında toplayan uçtan uca veri hazırlama ve eğitim hattı.
+
+> [!IMPORTANT]
+> **Platform Desteği Bilgilendirmesi:** Kuruluma hazır tek tıkla masaüstü yükleyicisi (`AutoPlate_Setup_v1.0.exe`) **şimdilik yalnızca Windows 10 / 11 (64-bit)** işletim sisteminde çalışmaktadır. Linux ve macOS kullanıcıları projeyi Python sanal ortamı üzerinden doğrudan çalıştırabilirler.
 
 ---
 
@@ -20,11 +23,13 @@ Araç plakası tespiti (**License Plate Detection**) için web scraping'den baş
 - [✨ Özellikler](#-özellikler)
 - [🔄 5 Aşamalı Veri İşleme Hattı](#-5-aşamalı-veri-işleme-hattı)
 - [💻 Kurulum](#-kurulum)
+  - [Seçenek A: Windows Kurulum Dosyası (Önerilen)](#seçenek-a-windows-kurulum-dosyası-önerilen)
+  - [Seçenek B: Kaynak Koddan Çalıştırma (Çapraz Platform)](#seçenek-b-kaynak-koddan-çalıştırma-çapraz-platform)
 - [🚀 Uygulamanın Çalıştırılması](#-uygulamanın-çalıştırılması)
 - [☁️ Google Colab ile Model Eğitimi](#️-google-colab-ile-model-eğitimi)
 - [📁 Veri Seti Dizin Yapısı](#-veri-seti-dizin-yapısı)
 - [⚙️ Yapılandırma ve Parametreler](#️-yapılandırma-ve-parametreler)
-- [📦 Sürümler (Releases)](#-sürümler-releases)
+- [📦 Sürümler & İndirmeler (Releases)](#-sürümler--i̇ndirmeler-releases)
 - [📄 Lisans & Katkı](#-lisans--katkı)
 
 ---
@@ -32,6 +37,7 @@ Araç plakası tespiti (**License Plate Detection**) için web scraping'den baş
 ## ✨ Özellikler
 
 - **Modern & Şık Dark-Theme Arayüz:** PySide6 (Qt) ile geliştirilmiş, kullanıcı dostu ve duyarlı grafik arayüz.
+- **Hazır Windows Yükleyicisi (Setup):** Python veya CUDA kurulumu gerektirmeyen, bağımlılıkları gömülü tek tıkla kurulabilir masaüstü programı.
 - **Donmayan Arka Plan İşlemleri:** `QThread`, `QMutex` ve `QWaitCondition` mimarisi sayesinde uzun süren scraping ve YOLO tahminleri arayüzü kilitlemez.
 - **Etkileşimli Doğrulama Desteği:** Cloudflare / Bot korumalarını aşmak için tarayıcı açıldığında kullanıcı onayını bekleyen akıllı duraklatma mekanizması.
 - **Otomatik YOLO Etiketleme:** Mevcut bir YOLO ağırlığı ile ham görselleri saniyeler içinde tespit edip normalize edilmiş (`xywhn`) `.txt` dosyaları oluşturma.
@@ -76,17 +82,22 @@ flowchart LR
 
 ## 💻 Kurulum
 
-### Gereksinimler
-- Python 3.9 veya üstü
-- Git
+### Seçenek A: Windows Kurulum Dosyası (Önerilen)
+> **Not:** Hazır derlenmiş kurulum programı şimdilik **yalnızca Windows (64-bit)** sistemlerde çalışmaktadır.
 
-### 1. Depoyu Klonlayın
+1. [Releases](https://github.com/Emingrgl/Yolo_Plate_Detection/releases) sayfasına gidin.
+2. **`AutoPlate_Setup_v1.0.exe`** dosyasını indirin.
+3. Kurulum sihirbazını çalıştırarak masaüstü kısayolundan AutoPlate'i doğrudan başlatın.
+
+### Seçenek B: Kaynak Koddan Çalıştırma (Çapraz Platform)
+
+#### 1. Depoyu Klonlayın
 ```bash
 git clone https://github.com/Emingrgl/Yolo_Plate_Detection.git
 cd Yolo_Plate_Detection
 ```
 
-### 2. Sanal Ortam Oluşturun (Önerilen)
+#### 2. Sanal Ortam Oluşturun
 ```bash
 # Windows
 python -m venv .venv
@@ -97,7 +108,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Bağımlılıkları Yükleyin
+#### 3. Bağımlılıkları Yükleyin
 ```bash
 pip install -r requirements.txt
 ```
@@ -243,11 +254,12 @@ Arayüzdeki **Parametreler** sekmesinden özelleştirebileceğiniz başlıca aya
 
 ---
 
-## 📦 Sürümler (Releases)
+## 📦 Sürümler & İndirmeler (Releases)
 
 En son kararlı sürümü ve güncellemeleri [GitHub Releases](https://github.com/Emingrgl/Yolo_Plate_Detection/releases) sayfasından indirebilirsiniz:
 
-- **[v1.0.0](https://github.com/Emingrgl/Yolo_Plate_Detection/releases/tag/v1.0.0)** - İlk resmi sürüm:
+- **[v1.0.0](https://github.com/Emingrgl/Yolo_Plate_Detection/releases/tag/v1.0.0)**:
+  - 🪟 **`AutoPlate_Setup_v1.0.exe`**: Resmi Windows 64-bit masaüstü kurulum dosyası.
   - PySide6 GUI tabanlı 5 aşamalı pipeline
   - Camoufox entegreli web scraper
   - Ultralytics YOLO otomatik etiketleme & filtreleme motoru
